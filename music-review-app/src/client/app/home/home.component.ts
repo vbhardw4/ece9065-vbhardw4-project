@@ -8,6 +8,7 @@ import { PlaylistDialogComponentFromHomePageComponent } from './../playlists/pla
 import { ViewHiddenSongsDialogComponent } from '../songs/view-hidden-songs-dialog/view-hidden-songs-dialog.component';
 // import { UserService } from './../user/user.service';
 
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -23,6 +24,7 @@ import { ViewHiddenSongsDialogComponent } from '../songs/view-hidden-songs-dialo
 export class HomeComponent implements OnInit {
   topTenSongs:SongsModel[];
   comments:string;
+  rating:string;
   topTenSongsfiltered
   receivedChildMessage: string;
   isAdminLoggedIn:string;
@@ -92,8 +94,8 @@ export class HomeComponent implements OnInit {
   callServiceForDisplayingTop10Songs(){
     this._songsService.fetchTop10Songs().subscribe(
       songs=>{
-        console.log(`Inside it ${songs.reviews[0]}`);
-        this.topTenSongs = songs.reviews;
+        console.log(`Inside it ${JSON.stringify(songs)}`);
+        this.topTenSongs = songs;
       }
     )
   }
@@ -109,8 +111,9 @@ export class HomeComponent implements OnInit {
     dialogConfig.minWidth = "100px";
 
     dialogConfig.data = {
-      songID:songID,
-      comments: this.comments
+      musicInfoId:songID,
+      reviews: this.comments,
+      rating:this.rating
   };
   const dialogRef = this.dialog.open(RatingDialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(

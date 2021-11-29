@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { HttpClient,HttpHeaders,HttpHandler } from '@angular/common/http';
 import { SongsModel } from './../songsModel';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+
+import { Observable, throwError } from 'rxjs';
+import { catchError, retry } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -24,11 +26,12 @@ export class SongsService {
   */
   uploadNewSong(newSong:SongsModel):Observable<SongsModel>{
     let httpHeaders = new HttpHeaders().set('Content-Type','application/Json');
-    let uploadNewSongURL = `/secure/song/${newSong.title}`;
+    // let uploadNewSongURL = `/secure/song/${newSong.title}`;
+    let uploadNewSongURL = `http://localhost:8080/v1/musicInfo`;
     let options = {
       headers:httpHeaders
     };
-    return this.http.put<SongsModel>(uploadNewSongURL,newSong,options);
+    return this.http.post<SongsModel>(uploadNewSongURL,newSong,options);
   };
 
   /*
@@ -37,13 +40,14 @@ export class SongsService {
   */
   fetchTop10Songs():Observable<any>{
     console.log(`Calling service inside service`);
-    let httpHeaders = new HttpHeaders().set('Content-Type','application/Json');
+    let httpHeaders = new HttpHeaders().set('Access-Control-Allow-Origin','*');
     let fetchtop10SongsURL = `/public/fetchTopTenSongs/`;
     let options = {
       headers:httpHeaders
     };
 
-    return this.http.get<any>(fetchtop10SongsURL);
+    // return this.http.get<any>(fetchtop10SongsURL);
+    return this.http.get<SongsModel>(`http://localhost:8082/v1/music`,options);
   };
   
 /*
@@ -67,7 +71,7 @@ export class SongsService {
       headers:httpHeaders
     };
 
-    return this.http.get<any>(fetchAllSongsURI,options);
+    return this.http.get<SongsModel>(`http://localhost:8080/v1/musicInfo`,options);
   }
   readonly filteredSongs$ = this.searchTerm$.pipe(
     debounceTime(250),

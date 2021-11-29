@@ -16,7 +16,9 @@ import {MatInputModule} from '@angular/material';
 import {MatListModule} from '@angular/material/list';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
-import { StarRatingComponent } from 'ng-starrating';
+import { HttpClientModule } from '@angular/common/http';
+
+// import { StarRatingComponent } from 'ng-starrating';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { SplitterModule } from '@syncfusion/ej2-angular-layouts';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
@@ -28,7 +30,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
-  declarations: [StarRatingComponent],
+  // declarations: [StarRatingComponent],
   imports: [
     CommonModule,
     MatCheckboxModule,
@@ -48,7 +50,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     MatTableModule,
     MatDialogModule,
     TextFieldModule,
-    NgbModule
+    NgbModule,
+    HttpClientModule
 
   ],
   exports: [
@@ -64,7 +67,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     MatExpansionModule,
     NgxMatSelectSearchModule,
     Ng2SearchPipeModule,
-    StarRatingComponent,
+    // StarRatingComponent,
     SplitterModule,
     MatAutocompleteModule,
     MatTableModule,

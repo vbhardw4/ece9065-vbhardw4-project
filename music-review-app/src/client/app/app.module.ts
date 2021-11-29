@@ -4,7 +4,7 @@
 */
 
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './nav-bar/nav-bar.component';
@@ -27,6 +27,22 @@ import { RatingDialogComponent } from './ratings/rating-dialog/rating-dialog.com
 import { PlaylistDialogComponentFromHomePageComponent } from './playlists/playlist-dialog-component-from-home-page/playlist-dialog-component-from-home-page.component';
 import { AdminModule } from './admin/admin.module';
 import { ViewHiddenSongsDialogComponent } from './songs/view-hidden-songs-dialog/view-hidden-songs-dialog.component';
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
+
+function initializeKeycloak(keycloak: KeycloakService) {
+  return () =>
+    keycloak.init({
+      config: {
+        url: 'http://localhost:8080/auth',
+        realm: 'master',
+        clientId: 'music-application-public-client',
+      },
+      initOptions: {
+        pkceMethod: 'S256',
+        redirectUri: 'http://localhost:4200/'
+      },loadUserProfileAtStartUp: false
+    });
+}
 
 @NgModule({
   declarations: [
@@ -49,6 +65,7 @@ BrowserModule,
   HttpClientModule,
   MatExpansionModule,
   CommonUtilsModule,
+  KeycloakAngularModule,
   PipeModule,
   RatingsModule,
   AdminModule
@@ -58,7 +75,16 @@ BrowserModule,
     PipeModule
   ],
   entryComponents:[AddSongToPlaylistDialogComponent,RatingDialogComponent,PlaylistDialogComponentFromHomePageComponent,ViewHiddenSongsDialogComponent],
-  providers: [SongsService],
+  providers: [
+  {
+    provide: APP_INITIALIZER,
+    useFactory: initializeKeycloak,
+    multi: true,
+    deps: [KeycloakService],
+   
+  },
+    SongsService
+],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

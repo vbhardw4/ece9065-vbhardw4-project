@@ -10,6 +10,7 @@ import { AboutUsComponent } from './about-us/about-us.component';
 import { EditPlaylistComponent } from './playlists/edit-playlist/edit-playlist.component';
 import { ViewAllPlaylistsComponent } from './playlists/view-all-playlists/view-all-playlists.component';
 import { GrantPriviligeToUsersComponent } from './admin/grant-privilige-to-users/grant-privilige-to-users.component';
+import { AuthKeyClockGuard } from './routegaurds/auth.route';
 /*
   For handling the angular routes
 */
@@ -26,12 +27,12 @@ const routes: Routes = [
   {
     path:'addNewSong',
     component:AddNewSongComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthKeyClockGuard],
   },
   {
     path:'createPlaylist',
     component:CreateNewPlaylistComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthKeyClockGuard]
   },
   {
     path:'aboutUs',
@@ -40,7 +41,7 @@ const routes: Routes = [
   {
     path:'editPlaylist',
     component:EditPlaylistComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthKeyClockGuard]
   },
   {
     path:'viewAllPlaylists',
@@ -49,7 +50,7 @@ const routes: Routes = [
   {
     path:'grantPriviligeToUsersComponent',
     component:GrantPriviligeToUsersComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthKeyClockGuard]
   }
 ];
 

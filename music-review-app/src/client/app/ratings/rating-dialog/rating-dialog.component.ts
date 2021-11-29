@@ -4,6 +4,7 @@ import {NgbRatingConfig} from '@ng-bootstrap/ng-bootstrap';
 import { FormControl,Validators } from '@angular/forms';
 import { RatingService } from './../ratingsServices/rating.service';
 import { RatingsModel } from './../ratingsModel';
+import { ReviewsModel } from './../reviewsModel';
 import { AuthService } from './../../services/auth.service';
 
 @Component({
@@ -13,8 +14,9 @@ import { AuthService } from './../../services/auth.service';
 })
 export class RatingDialogComponent implements OnInit {
   currentRate : number;
-  userComments : string;
-  songID:string;
+  reviews : string;
+  rating:number;
+  musicInfoId:number;
   ratingControl = new FormControl(null,Validators.required);
   newReview:Object;
 
@@ -25,8 +27,9 @@ export class RatingDialogComponent implements OnInit {
     ratingConfig:NgbRatingConfig,
     private _ratingService:RatingService
   ) {
-    this.userComments = data.comments;
-    this.songID = data.songID;
+    this.reviews = data.reviews;
+    this.musicInfoId = data.musicInfoId;
+    this.rating = data.rating;
     ratingConfig.max = 5;
    }
 
@@ -41,23 +44,28 @@ export class RatingDialogComponent implements OnInit {
   }
 
   save() {
-    console.log(`For song ${this.songID} Comments given are ${this.userComments} and rating of ${this.currentRate}
+    console.log(`For song ${this.musicInfoId} Comments given are ${this.reviews} and rating of ${this.currentRate}
     is given`);
-    let SongToReview : RatingsModel  = {
+    // let SongToReview : RatingsModel  = {
       
-      reviewedSongID:this.songID,
-      // createdByUser:this.auth.userProfileSubject$.value.email
-      ratingsGivenByUser:{
-        'rating':this.currentRate,
-        'ratedByUser':this.auth.userProfileSubject$.value.email,
-        'comments':this.userComments
-      }
-    };
-    this.callServiceForSavingUserReviews(SongToReview);
+    //   reviewedSongID:this.songID,
+    //   // createdByUser:this.auth.userProfileSubject$.value.email
+    //   ratingsGivenByUser:{
+    //     'rating':this.currentRate,
+    //     'ratedByUser':this.auth.userProfileSubject$.value.email,
+    //     'comments':this.userComments
+    //   }
+    // };
+    let songToReview:ReviewsModel = {
+      musicInfoId : this.musicInfoId,
+      reviews : this.reviews,
+      rating  : this.rating
+    }
+    this.callServiceForSavingUserReviews(songToReview);
     this.dialogRef.close();
   }
 
-  callServiceForSavingUserReviews(SongToReview:RatingsModel) {
+  callServiceForSavingUserReviews(SongToReview:ReviewsModel) {
     this._ratingService.addReviewToSong(SongToReview).subscribe(result=>{
       this.newReview = result;
       

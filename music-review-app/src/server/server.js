@@ -22,16 +22,17 @@ const authConfig = {
 // using JWKS from vishalbhardwaj.auth0.com
 const checkJwt = jwt({
   secret: jwksRsa.expressJwtSecret({
+    secret: 'secret',
     cache: true,
     rateLimit: true,
     jwksRequestsPerMinute: 5,
-    jwksUri: `https://${authConfig.domain}/.well-known/jwks.json`
+    // jwksUri: `https://${authConfig.domain}/.well-known/jwks.json`
   }),
-
+  algorithms: ['HS256'],
   
   audience: authConfig.audience,
   issuer: `https://${authConfig.domain}/`,
-  algorithm: [serverUtils.AUTHORIZATION_ALGORITHM_USED]
+  // algorithm: [serverUtils.AUTHORIZATION_ALGORITHM_USED]
 });
 
 //Define an endpoint that must be called with an access token
@@ -49,14 +50,33 @@ app.get("/secure/", checkJwt, (req, res) => {
 app.use(bodyParser.urlencoded({ extended:true}));
 app.use(bodyParser.json());
 
-var mongoDB = `mongodb+srv://${serverUtils.ATLAS_USERNAME}:${serverUtils.ATLAS_PASSWORD}@cluster0-vtgno.mongodb.net/${serverUtils.DATABASE_NAME}?retryWrites=true&w=majority`;
-mongoose.connect(mongoDB, { useNewUrlParser: true });
-var db = mongoose.connection;
+app.use(function (req, res, next) {
 
-db.on('error',console.error.bind(console,'Error while connecting to Mongo DB. Please check your connection once !!!'));
-db.once('open', function() {
-  console.log('Connected to mongoose database successfully !');
+  // Website you wish to allow to connect
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+
+  // Request methods you wish to allow
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+  // Request headers you wish to allow
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+  // Set to true if you need the website to include cookies in the requests sent
+  // to the API (e.g. in case you use sessions)
+  res.setHeader('Access-Control-Allow-Credentials', true);
+
+  // Pass to next layer of middleware
+  next();
 });
+
+// var mongoDB = `mongodb+srv://${serverUtils.ATLAS_USERNAME}:${serverUtils.ATLAS_PASSWORD}@cluster0-vtgno.mongodb.net/${serverUtils.DATABASE_NAME}?retryWrites=true&w=majority`;
+// mongoose.connect(mongoDB, { useNewUrlParser: true });
+// var db = mongoose.connection;
+
+// db.on('error',console.error.bind(console,'Error while connecting to Mongo DB. Please check your connection once !!!'));
+// db.once('open', function() {
+//   console.log('Connected to mongoose database successfully !');
+// });
 routes(app);
 
 // Start the app

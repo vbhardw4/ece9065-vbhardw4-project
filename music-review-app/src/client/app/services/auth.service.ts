@@ -136,7 +136,7 @@ export class AuthService {
   /*
     Function to get the token which is passed with every API call to know the authenticity of the user
   */
-  getTokenSilently$(options?): Observable<string> {
+  getTokenSilently$(options?): Observable<Object> {
     return this.auth0Client$.pipe(
       concatMap((client: Auth0Client) => from(client.getTokenSilently(options)))
     );

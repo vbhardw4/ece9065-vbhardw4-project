@@ -7,8 +7,8 @@
   <!-- <button class="btn btn-outline-primary mr-2" (click)="$event.stopPropagation(); myDrop.open();">Home</button> -->
     <!-- <button class="btn btn-outline-primary mr-2" (click)="$event.stopPropagation(); myDrop.open();">About Us</button>   -->`
     <a class="btn btn-outline-primary mr-2" routerLink="/aboutUs">About Us</a>
-    <button type="button" class="btn btn-primary SignIn" (click)="auth.login()" *ngIf="!auth.loggedIn">Log In</button>
-    <button type="button" class="btn btn-danger SignIn" (click)="auth.logout()" *ngIf="auth.loggedIn" >Log Out</button>
+    <button type="button" class="btn btn-primary SignIn" (click)="login()" *ngIf="!auth.loggedIn">Log In</button>
+    <button type="button" class="btn btn-danger SignIn" (click)="logout()" *ngIf="auth.loggedIn" >Log Out</button>
     <div class="btn-group" ngbDropdown role="group" aria-label="Button group with nested dropdown">
         <button class="btn btn-outline-primary mr-2" *ngIf="auth.loggedIn" ngbDropdownToggle>Songs</button>
         <div class="dropdown-menu" ngbDropdownMenu>

@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { SongsModel } from './../songsModel';
 import { RatingService } from './../../ratings/ratingsServices/rating.service';
 import { RatingsModel } from './../../ratings/ratingsModel';
+import { ReviewsModel } from '../../ratings/reviewsModel';
 
 
 @Component({
@@ -98,7 +99,16 @@ export class AddNewSongComponent implements OnInit {
   Service to Update Reviews in the Rating Database  	
 */
   callServiceToUpdateReviews(song:any) {
-    let SongToReview : RatingsModel  = {
+    // let SongToReview : RatingsModel  = {
+      
+    //   reviewedSongID:song.newSong[0]._id,
+    //   ratingsGivenByUser:{
+    //     'rating':5,
+    //     'ratedByUser':this.auth.userProfileSubject$.value.email,
+    //     'comments':song.newSong[0].reviews
+    //   }
+    // };
+    let SongToReview : ReviewsModel  = {
       
       reviewedSongID:song.newSong[0]._id,
       ratingsGivenByUser:{
